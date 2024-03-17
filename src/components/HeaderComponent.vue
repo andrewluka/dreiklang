@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import NavBar from './NavBar.vue'
-import NavBarItem from './NavBarItem.vue'
-import LogoDreiKlang from './LogoDreiKlang.vue'
+import NavBar from "./NavBar.vue";
+import NavBarItem from "./NavBarItem.vue";
+import LogoDreiKlang from "./LogoDreiKlang.vue";
 </script>
 
 <template>
@@ -29,7 +29,7 @@ header {
     display: flex;
     flex-direction: column;
     place-items: center;
-    align-items: start;
+    align-items: center;
     padding: 0;
     /* border-right: 1px solid rgba(245, 245, 220, 0.5); */
     box-shadow: 1px 0px 5px var(--vt-c-divider-light-1);
