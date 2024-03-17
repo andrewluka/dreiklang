@@ -11,7 +11,7 @@
 
 @media (min-width: 1024px) {
   .logo {
-    margin: 20px;
+    margin: 20px 10px 0 10px;
   }
 }
 </style>
