@@ -1,33 +1,13 @@
 // to document user's viewing history and save it locally
 
-type Epoch =
-  | "Medieval"
-  | "Renaissance"
-  | "Baroque"
-  | "Classical"
-  | "Early Romantic"
-  | "Romantic"
-  | "Late Romantic"
-  | "20th Century"
-  | "Post-War"
-  | "21st Century";
-
-type Genre = "Chamber" | "Keyboard" | "Orchestral" | "Stage" | "Vocal";
-
-interface CachedWorkInfo {
-  composer: {
-    id: string;
-    name: string;
-    complete_name: string;
-    epoch: Epoch;
-  };
-  work: {
-    genre: Genre;
-    title: string;
-    subtitle: string;
-    id: string;
-  };
-}
+import type { ComposerInfo, WorkInfo } from "@/services/FetchDetails";
+import {
+  addComposerToCache,
+  addWorkToCache,
+  getWorkFromCache,
+  removeWorkFromCache,
+  removecomposerFromCache,
+} from "./Cache";
 
 const VIEWING_HISTORY_KEY = "viewing_history";
 const VIEWING_HISTORY_DELIMITER = ",";
@@ -37,14 +17,29 @@ const getViewedWorkIds = () =>
 
 const MAX_VIEWING_HISTORY = 10;
 
-const addToViewingHistory = (id: number) => {
+const addWorkToViewingHistory = (id: string, work?: WorkInfo, composerInfo?: ComposerInfo) => {
   const idStr = String(id);
   const h = getViewedWorkIds().filter((w) => w !== idStr);
-  h.push(idStr);
+  h.unshift(idStr);
 
-  while (h.length > MAX_VIEWING_HISTORY) h.shift();
+  while (h.length > MAX_VIEWING_HISTORY) {
+    const workId = h.shift();
+    if (!workId) continue;
+
+    const work = getWorkFromCache(workId);
+
+    if (!work) continue;
+
+    const composerId = work.composer.id;
+
+    removecomposerFromCache(composerId);
+    removeWorkFromCache(workId);
+  }
 
   localStorage.setItem(VIEWING_HISTORY_KEY, h.join(VIEWING_HISTORY_DELIMITER));
+
+  work && addWorkToCache(work);
+  composerInfo && addComposerToCache(composerInfo);
 };
 
-export { getViewedWorkIds, MAX_VIEWING_HISTORY, addToViewingHistory };
+export { getViewedWorkIds, MAX_VIEWING_HISTORY, addWorkToViewingHistory };
