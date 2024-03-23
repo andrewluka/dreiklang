@@ -10,6 +10,23 @@
 
   --vt-c-indigo: #2c3e50;
 
+  --border-size: 1px;
+
+  /* --primary-color: hsla(160, 100%, 37%, 1);
+  --primary-color-hover: hsla(160, 100%, 37%, 0.2);
+  --primary-color-focus: hsla(160, 100%, 37%, 0.1);
+  --primary-color-unfocused: hsla(160, 100%, 37%, 0.7); */
+  /* #8a2be2 */
+  /* --primary-color: rgba(253, 253, 150, 1);
+  --primary-color-hover: rgba(253, 253, 150, 0.2);
+  --primary-color-focus: rgba(253, 253, 150, 0.1);
+  --primary-color-unfocused: rgba(253, 253, 150, 0.7); */
+
+  --primary-color: rgba(138, 43, 226, 1);
+  --primary-color-hover: rgba(138, 43, 226, 0.2);
+  --primary-color-focus: rgba(138, 43, 226, 0.1);
+  --primary-color-unfocused: rgba(138, 43, 226, 0.7);
+
   --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
   --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
   --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
@@ -23,12 +40,12 @@
 
 /* semantic color variables for this project */
 :root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
+  --background-color: var(--vt-c-white);
+  --background-color-soft: var(--vt-c-white-soft);
+  --background-color-mute: var(--vt-c-white-mute);
 
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
+  --border-color: var(--vt-c-divider-light-2);
+  --border-color-hover: var(--vt-c-divider-light-1);
 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
@@ -38,12 +55,12 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
+    --background-color: var(--vt-c-black);
+    --background-color-soft: var(--vt-c-black-soft);
+    --background-color-mute: var(--vt-c-black-mute);
 
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
+    --border-color: var(--vt-c-divider-dark-2);
+    --border-color-hover: var(--vt-c-divider-dark-1);
 
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
@@ -61,12 +78,12 @@
 body {
   min-height: 100vh;
   color: var(--color-text);
-  background: var(--color-background);
+  background: var(--background-color);
   transition:
     color 0.5s,
     background-color 0.5s;
   line-height: 1.6;
-  font-family:
+  /* font-family:
     Inter,
     -apple-system,
     BlinkMacSystemFont,
@@ -78,7 +95,8 @@ body {
     "Fira Sans",
     "Droid Sans",
     "Helvetica Neue",
-    sans-serif;
+    sans-serif; */
+  font-family: monospace;
   font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
