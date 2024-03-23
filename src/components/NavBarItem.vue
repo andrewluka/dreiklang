@@ -23,12 +23,9 @@ const formatRoute = (str: string) => {
 // const removeTrailingAndBeginningSlashes = (str: string) => str.split('/').filter(Boolean).join('/')
 
 const route = useRoute();
-const className: ComputedRef<string> = computed(() => {
-  const routeName = formatRoute(route.name?.toString() || "");
+const className: ComputedRef<"active" | "inactive"> = computed(() => {
+  const routeName = formatRoute(route.path || "");
   const propTo = formatRoute(props.to);
-
-  // special case: "/" aka home
-  if (routeName === "home") return propTo === "" ? "active" : "inactive";
 
   return propTo === routeName ? "active" : "inactive";
 });
@@ -52,23 +49,21 @@ a,
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    background-color: var(--primary-color-hover);
   }
 }
 
 .active {
-  text-shadow: var(--vt-c-text-light-2) 1px 0 10px;
-  color: hsla(160, 100%, 37%, 1);
-  background-color: hsla(160, 100%, 37%, 0.1);
-  /* font-weight: 500; */
-  /* color: yellow; */
+  text-shadow: var(--border-color-hover) 1px 0 10px;
+  color: var(--primary-color);
+  opacity: 1;
+  background-color: var(--primary-color-focus);
 }
 
 .inactive {
   text-shadow: none;
-  color: hsla(160, 100%, 37%, 0.7);
+  color: var(--primary-color);
+  opacity: 0.7;
   background-color: transparent;
-  /* font-weight: 400; */
-  /* color: blue; */
 }
 </style>
