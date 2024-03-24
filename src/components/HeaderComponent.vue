@@ -12,6 +12,10 @@ import LogoDreiKlang from "@/components/LogoDreiKlang.vue";
       <NavBarItem to="/">Home</NavBarItem>
       <NavBarItem to="/explore">Explore</NavBarItem>
     </NavBar>
+
+    <NavBar>
+      <NavBarItem to="/history">History</NavBarItem>
+    </NavBar>
   </header>
 </template>
 

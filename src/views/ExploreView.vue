@@ -15,18 +15,7 @@ onBeforeMount(async () => {
   <SearchBox placeholder="lolol"></SearchBox>
   <br />
   <!-- <div :class="$style.about"></div> -->
-  <WorkPanel
-    heading="Recommendations"
-    url-to-show-more="/"
-    :works="
-      works.map((w) => ({
-        composer: w.composerInfo.complete_name,
-        composerPortrait: w.composerInfo.portrait,
-        title: w.workInfo.work.title,
-        workId: w.workInfo.work.id,
-      }))
-    "
-  />
+  <WorkPanel heading="Recommendations" url-to-show-more="/" :works="works" />
 </template>
 
 <style module>

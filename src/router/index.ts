@@ -19,6 +19,10 @@ const router = createRouter({
       path: "/work/:id",
       component: () => import("@/views/WorkView.vue"),
     },
+    {
+      path: "/history",
+      component: () => import("@/views/HistoryView.vue"),
+    },
   ],
 });
 

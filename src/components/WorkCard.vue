@@ -1,23 +1,21 @@
 <script setup lang="ts">
+import type { WorkWithComposerInfo } from "@/services/FetchDetails";
 import { useRouter } from "vue-router";
 
 export interface WorkCardProps {
-  workId: string;
-  title: string;
-  composer: string;
-  // url
-  composerPortrait: string;
+  // workId: string;
+  // title: string;
+  // composer: string;
+  // // url
+  // composerPortrait: string;
+  workWithComposerInfo: WorkWithComposerInfo;
 }
 
-const props = defineProps<
-  WorkCardProps & {
-    class?: string;
-  }
->();
+const props = defineProps<WorkCardProps>();
 
 const router = useRouter();
 const goToWork = () => {
-  router.push(`/work/${props.workId}`);
+  router.push(`/work/${props.workWithComposerInfo.workInfo.work.id}`);
 };
 
 // const WORK_CARD_WIDTH = 220;
@@ -31,11 +29,13 @@ export { WORK_CARD_WIDTH };
 </script>
 
 <template>
-  <div :class="[$style.wrapper, props.class]" @click="goToWork">
-    <img :src="props.composerPortrait" :class="$style.img" />
+  <div :class="[$style.wrapper]" @click="goToWork">
+    <img :src="props.workWithComposerInfo.composerInfo.portrait" :class="$style.img" />
     <div :class="$style.metadata">
-      <p :class="$style.ellipsis">{{ props.title }}</p>
-      <p :class="[$style.composer, $style.ellipsis]">{{ props.composer }}</p>
+      <p :class="$style.ellipsis">{{ props.workWithComposerInfo.workInfo.work.title }}</p>
+      <p :class="[$style.composer, $style.ellipsis]">
+        {{ props.workWithComposerInfo.composerInfo.complete_name }}
+      </p>
     </div>
   </div>
 </template>

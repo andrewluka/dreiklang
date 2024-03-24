@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import WorkCard, { WORK_CARD_WIDTH, type WorkCardProps } from "@/components/WorkCard.vue";
+import type { WorkWithComposerInfo } from "@/services/FetchDetails";
 import { ref, computed, type Ref, onMounted, onBeforeUnmount, onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 
@@ -21,7 +22,7 @@ onMounted(() => callback());
 onBeforeUnmount(() => window.removeEventListener("resize", callback));
 
 const props = defineProps<{
-  works: WorkCardProps[];
+  works: WorkWithComposerInfo[];
   heading: string;
   urlToShowMore?: string;
 }>();
@@ -43,11 +44,8 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
   <div ref="wrapper" :class="$style.contentWrapper">
     <WorkCard
       v-for="work in filteredWorks"
-      :key="work.workId"
-      :composer="work.composer"
-      :composer-portrait="work.composerPortrait"
-      :work-id="work.workId"
-      :title="work.title"
+      :work-with-composer-info="work"
+      :key="work.workInfo.work.id"
     />
     <div
       v-if="props.urlToShowMore && filteredWorks.length < works.length"
@@ -71,6 +69,7 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
   display: flex;
   align-items: center;
   justify-content: center;
+  border-color: black;
 }
 
 .fadeHoverEffect {
@@ -80,6 +79,7 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
 
 .fadeHoverEffect:hover {
   opacity: 1;
+  border: var(--border-size) solid var(--primary-color);
   text-shadow: white 0px 0 2px;
   cursor: pointer;
 }
