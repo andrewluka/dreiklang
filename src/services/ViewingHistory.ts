@@ -23,7 +23,7 @@ const addWorkToViewingHistory = (id: string, work?: WorkInfo, composerInfo?: Com
   h.unshift(idStr);
 
   while (h.length > MAX_VIEWING_HISTORY) {
-    const workId = h.shift();
+    const workId = h.pop();
     if (!workId) continue;
 
     const work = getWorkFromCache(workId);

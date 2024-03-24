@@ -9,7 +9,11 @@ export interface WorkCardProps {
   composerPortrait: string;
 }
 
-const props = defineProps<WorkCardProps>();
+const props = defineProps<
+  WorkCardProps & {
+    class?: string;
+  }
+>();
 
 const router = useRouter();
 const goToWork = () => {
@@ -27,7 +31,7 @@ export { WORK_CARD_WIDTH };
 </script>
 
 <template>
-  <div :class="$style.wrapper" @click="goToWork">
+  <div :class="[$style.wrapper, props.class]" @click="goToWork">
     <img :src="props.composerPortrait" :class="$style.img" />
     <div :class="$style.metadata">
       <p :class="$style.ellipsis">{{ props.title }}</p>
@@ -75,8 +79,13 @@ export { WORK_CARD_WIDTH };
   border: var(--border-size) solid var(--border-color);
   /* box-shadow: 0px 0px 15px var(--border-color); */
 
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   overflow: hidden;
+  transition: all 0.4s;
+}
+
+.wrapper:hover {
   cursor: pointer;
+  border-color: var(--primary-color);
 }
 </style>

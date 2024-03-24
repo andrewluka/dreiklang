@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import WorkPanel from "@/components/WorksPanel.vue";
+import SearchBox from "@/components/SearchBox.vue";
 import { fetchRandomWorks, type WorkWithComposerInfo } from "@/services/FetchDetails";
 import { onBeforeMount, ref } from "vue";
 
@@ -11,9 +12,12 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div :class="$style.about"></div>
+  <SearchBox placeholder="lolol"></SearchBox>
+  <br />
+  <!-- <div :class="$style.about"></div> -->
   <WorkPanel
-    heading=""
+    heading="Recommendations"
+    url-to-show-more="/"
     :works="
       works.map((w) => ({
         composer: w.composerInfo.complete_name,

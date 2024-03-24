@@ -24,7 +24,7 @@ const useWindowDimensions = () => {
   onBeforeMount(() => window.addEventListener("resize", onResize));
   onBeforeUnmount(() => window.removeEventListener("resize", onResize));
 
-  return dimensions;
+  return Object.freeze(dimensions.value);
 };
 
-export default useWindowDimensions;
+export { useWindowDimensions };

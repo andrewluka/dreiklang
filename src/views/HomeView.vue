@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WorkCardProps } from "@/components/WorkCard.vue";
+import { type WorkCardProps } from "@/components/WorkCard.vue";
 import WorksPanel from "@/components/WorksPanel.vue";
 import { fetchWorkWithComposerInfo, type WorkWithComposerInfo } from "@/services/FetchDetails";
 import { getViewedWorkIds } from "@/services/ViewingHistory";
@@ -8,8 +8,9 @@ import { computed, onBeforeMount, ref } from "vue";
 const works = ref<WorkWithComposerInfo[]>([]);
 
 onBeforeMount(async () => {
-  // first 10 works
-  const workIds = getViewedWorkIds().slice(0, 10);
+  // first n works
+  const n = 10;
+  const workIds = getViewedWorkIds().slice(0, n);
 
   works.value = await Promise.all(workIds.map((id) => fetchWorkWithComposerInfo(id)));
 

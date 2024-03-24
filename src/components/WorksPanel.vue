@@ -52,7 +52,7 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
     <div
       v-if="props.urlToShowMore && filteredWorks.length < works.length"
       @click="go"
-      :class="$style.showMore"
+      :class="[$style.showMore, $style.fadeHoverEffect]"
     >
       <h2>
         Show<br />
@@ -67,15 +67,18 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
   width: 150px;
   color: white;
   background-color: black;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.fadeHoverEffect {
   opacity: 0.3;
   transition: all 0.4s;
 }
 
-.showMore:hover {
+.fadeHoverEffect:hover {
   opacity: 1;
   text-shadow: white 0px 0 2px;
   cursor: pointer;
