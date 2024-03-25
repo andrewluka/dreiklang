@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { fetchWorkWithComposerInfo, type WorkWithComposerInfo } from "@/services/FetchDetails";
 import { getViewedWorkIds } from "@/services/ViewingHistory";
-import WorkCard from "@/components/WorkCard.vue";
+import PaginatedWorkGrid from "@/components/PaginatedWorkGrid.vue";
 import { ref, onBeforeMount } from "vue";
 
 const viewedWorks = ref<WorkWithComposerInfo[]>([]);
@@ -14,9 +14,11 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <WorkCard
+  <PaginatedWorkGrid v-if="viewedWorks.length" :works="viewedWorks"></PaginatedWorkGrid>
+  <span v-else>History empty</span>
+  <!-- <WorkCard
     v-for="work in viewedWorks"
     :work-with-composer-info="work"
     :key="work.workInfo.work.id"
-  />
+  /> -->
 </template>

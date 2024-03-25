@@ -17,15 +17,12 @@ const router = useRouter();
 const goToWork = () => {
   router.push(`/work/${props.workWithComposerInfo.workInfo.work.id}`);
 };
-
-// const WORK_CARD_WIDTH = 220;
-
-// export { WORK_CARD_WIDTH };
 </script>
 
 <script lang="ts">
-const WORK_CARD_WIDTH = 200;
-export { WORK_CARD_WIDTH };
+const WORK_CARD_WIDTH = 175;
+const WORK_CARD_HEIGHT = WORK_CARD_WIDTH * (4 / 3);
+export { WORK_CARD_WIDTH, WORK_CARD_HEIGHT };
 </script>
 
 <template>
@@ -42,7 +39,7 @@ export { WORK_CARD_WIDTH };
 
 <style module>
 :root {
-  --width: 200px;
+  --width: 175px;
   --height-to-width-ratio: 4/3;
 }
 

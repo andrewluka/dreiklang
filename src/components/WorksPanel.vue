@@ -46,7 +46,7 @@ const filteredWorks = computed(() => {
   const numberOfDisplayableElements =
     Math.floor(wrapperWidthMinusShowMoreLink / cardwidthwithcolumngap) || 1;
 
-  return props.works.slice(0, Math.min(numberOfDisplayableElements, props.works.length));
+  return props.works.slice(0, numberOfDisplayableElements);
 });
 
 const router = useRouter();
