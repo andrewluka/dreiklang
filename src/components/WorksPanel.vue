@@ -1,25 +1,37 @@
 <script setup lang="ts">
-import WorkCard, { WORK_CARD_WIDTH, type WorkCardProps } from "@/components/WorkCard.vue";
+import WorkCard, { WORK_CARD_WIDTH } from "@/components/WorkCard.vue";
+import { useChildDimensions } from "@/hooks/useChildDimensions";
 import type { WorkWithComposerInfo } from "@/services/FetchDetails";
-import { ref, computed, type Ref, onMounted, onBeforeUnmount, onBeforeMount } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 
 const cardwidthwithcolumngap = WORK_CARD_WIDTH; // px
 const showMoreLinkWidth = WORK_CARD_WIDTH * (3 / 4);
 
-const wrapper: Ref<HTMLDivElement | null> = ref(null);
-const wrapperWidthMinusShowMoreLink = ref(0);
+const wrapper = ref<HTMLDivElement>();
 
-function callback() {
-  wrapperWidthMinusShowMoreLink.value =
-    (wrapper.value?.clientWidth || 0) - showMoreLinkWidth || wrapperWidthMinusShowMoreLink.value;
+const wrapperDimensions = useChildDimensions(wrapper);
 
-  if (wrapperWidthMinusShowMoreLink.value < 0) wrapperWidthMinusShowMoreLink.value = 0;
-}
+/*
 
-onBeforeMount(() => window.addEventListener("resize", callback));
-onMounted(() => callback());
-onBeforeUnmount(() => window.removeEventListener("resize", callback));
+THIS DONT WORK. FIX IT.
+
+
+*/
+
+// const wrapper: Ref<HTMLDivElement | null> = ref(null);
+// const wrapperWidthMinusShowMoreLink = ref(0);
+
+// function callback() {
+//   wrapperWidthMinusShowMoreLink.value =
+//     (wrapper.value?.clientWidth || 0) - showMoreLinkWidth || wrapperWidthMinusShowMoreLink.value;
+
+//   if (wrapperWidthMinusShowMoreLink.value < 0) wrapperWidthMinusShowMoreLink.value = 0;
+// }
+
+// onBeforeMount(() => window.addEventListener("resize", callback));
+// onMounted(() => callback());
+// onBeforeUnmount(() => window.removeEventListener("resize", callback));
 
 const props = defineProps<{
   works: WorkWithComposerInfo[];
@@ -28,8 +40,11 @@ const props = defineProps<{
 }>();
 
 const filteredWorks = computed(() => {
+  const wrapperWidthMinusShowMoreLink =
+    (wrapperDimensions.value.clientWidth || 0) - showMoreLinkWidth;
+
   const numberOfDisplayableElements =
-    Math.floor(wrapperWidthMinusShowMoreLink.value / cardwidthwithcolumngap) || 1;
+    Math.floor(wrapperWidthMinusShowMoreLink / cardwidthwithcolumngap) || 1;
 
   return props.works.slice(0, Math.min(numberOfDisplayableElements, props.works.length));
 });

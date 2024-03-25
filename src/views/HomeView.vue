@@ -12,8 +12,6 @@ onBeforeMount(async () => {
   const workIds = getViewedWorkIds().slice(0, n);
 
   works.value = await Promise.all(workIds.map((id) => fetchWorkWithComposerInfo(id)));
-
-  console.log(works.value);
 });
 </script>
 

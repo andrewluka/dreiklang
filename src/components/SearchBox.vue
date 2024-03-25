@@ -28,7 +28,7 @@ const onInput = (e: InputEvent) => {
   background-color: var(--background-color-mute);
   border: var(--border-size) solid var(--border-color);
   transition: all 0.4s;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   color: var(--text-color);
   border-radius: 100px;
   outline-style: solid;

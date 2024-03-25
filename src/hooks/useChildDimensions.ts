@@ -1,8 +1,6 @@
-import { nextTick, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeMount, onBeforeUnmount, onMounted, ref, type Ref } from "vue";
 
-const useChildDimensions = <T extends HTMLElement>() => {
-  const childRef = ref<T>();
-
+const useChildDimensions = <T extends HTMLElement>(childRef: Ref<T | undefined>) => {
   const dimensions = ref({
     clientWidth: childRef.value?.clientWidth,
     offsetWidth: childRef.value?.offsetWidth,
@@ -14,24 +12,22 @@ const useChildDimensions = <T extends HTMLElement>() => {
   });
 
   function onResize() {
-    nextTick(() => {
-      dimensions.value = {
-        clientWidth: childRef.value?.clientWidth,
-        offsetWidth: childRef.value?.offsetWidth,
-        scrollWidth: childRef.value?.scrollWidth,
+    dimensions.value = {
+      clientWidth: childRef.value?.clientWidth,
+      offsetWidth: childRef.value?.offsetWidth,
+      scrollWidth: childRef.value?.scrollWidth,
 
-        clientHeight: childRef.value?.clientHeight,
-        offsetHeight: childRef.value?.offsetHeight,
-        scrollHeight: childRef.value?.scrollHeight,
-      };
-    });
+      clientHeight: childRef.value?.clientHeight,
+      offsetHeight: childRef.value?.offsetHeight,
+      scrollHeight: childRef.value?.scrollHeight,
+    };
   }
 
   onBeforeMount(() => window.addEventListener("resize", onResize));
   onMounted(onResize);
   onBeforeUnmount(() => window.removeEventListener("resize", onResize));
 
-  return { childRef, dimensions };
+  return dimensions;
 };
 
-export { useChildDimensions as useWindowDimensions };
+export { useChildDimensions };
