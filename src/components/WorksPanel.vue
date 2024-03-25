@@ -39,12 +39,24 @@ const props = defineProps<{
   urlToShowMore?: string;
 }>();
 
-const filteredWorks = computed(() => {
+const shouldShowMore = computed(() => {
   const wrapperWidthMinusShowMoreLink =
     (wrapperDimensions.value.clientWidth || 0) - showMoreLinkWidth;
 
   const numberOfDisplayableElements =
     Math.floor(wrapperWidthMinusShowMoreLink / cardwidthwithcolumngap) || 1;
+
+  return !!props.urlToShowMore && numberOfDisplayableElements < props.works.length;
+});
+
+const filteredWorks = computed(() => {
+  const wrapperWidthMinusShowMoreLink =
+    (wrapperDimensions.value.clientWidth || 0) - showMoreLinkWidth;
+
+  const numberOfDisplayableElements =
+    Math.floor(wrapperWidthMinusShowMoreLink / cardwidthwithcolumngap) -
+      // account for "show more" card
+      (shouldShowMore.value ? 1 : 0) || 1;
 
   return props.works.slice(0, numberOfDisplayableElements);
 });
@@ -62,11 +74,7 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
       :work-with-composer-info="work"
       :key="work.workInfo.work.id"
     />
-    <div
-      v-if="props.urlToShowMore && filteredWorks.length < works.length"
-      @click="go"
-      :class="[$style.showMore, $style.fadeHoverEffect]"
-    >
+    <div v-if="shouldShowMore" @click="go" :class="[$style.showMore, $style.fadeHoverEffect]">
       <h2>
         Show<br />
         More
@@ -77,7 +85,7 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
 
 <style module>
 .showMore {
-  width: 150px;
+  min-width: 150px;
   color: white;
   background-color: black;
   border-radius: var(--border-radius);
