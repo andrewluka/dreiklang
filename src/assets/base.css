@@ -53,6 +53,8 @@
   --outline-color: rgba(44, 44, 44, 0.8);
   --section-gap: 160px;
   --border-radius: 5px;
+
+  --font-family: monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -100,9 +102,17 @@ body {
     "Droid Sans",
     "Helvetica Neue",
     sans-serif; */
-  font-family: monospace;
+  font-family: var(--font-family);
   font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.free-floating-button {
+  border: none;
+  color: var(--text-color);
+  background: none;
+  transition: all 0.4s;
+  cursor: pointer;
 }

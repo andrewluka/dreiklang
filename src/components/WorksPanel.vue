@@ -6,7 +6,6 @@ import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 
 const cardwidthwithcolumngap = WORK_CARD_WIDTH; // px
-const showMoreLinkWidth = WORK_CARD_WIDTH * (3 / 4);
 
 const wrapper = ref<HTMLDivElement>();
 
@@ -39,26 +38,22 @@ const props = defineProps<{
   urlToShowMore?: string;
 }>();
 
+const numberOfDisplayableElements = computed(() => {
+  const wrapperWidthMinusShowMoreLink = (wrapperDimensions.value.clientWidth || 30) - 30 || 0;
+
+  return Math.floor(wrapperWidthMinusShowMoreLink / cardwidthwithcolumngap) || 1;
+});
+
 const shouldShowMore = computed(() => {
-  const wrapperWidthMinusShowMoreLink =
-    (wrapperDimensions.value.clientWidth || 0) - showMoreLinkWidth;
-
-  const numberOfDisplayableElements =
-    Math.floor(wrapperWidthMinusShowMoreLink / cardwidthwithcolumngap) || 1;
-
-  return !!props.urlToShowMore && numberOfDisplayableElements < props.works.length;
+  return !!props.urlToShowMore && numberOfDisplayableElements.value < props.works.length;
 });
 
 const filteredWorks = computed(() => {
-  const wrapperWidthMinusShowMoreLink =
-    (wrapperDimensions.value.clientWidth || 0) - showMoreLinkWidth;
+  const numDisplayable = shouldShowMore.value
+    ? numberOfDisplayableElements.value - 1 || 1
+    : numberOfDisplayableElements.value;
 
-  const numberOfDisplayableElements =
-    Math.floor(wrapperWidthMinusShowMoreLink / cardwidthwithcolumngap) -
-      // account for "show more" card
-      (shouldShowMore.value ? 1 : 0) || 1;
-
-  return props.works.slice(0, numberOfDisplayableElements);
+  return props.works.slice(0, numDisplayable);
 });
 
 const router = useRouter();

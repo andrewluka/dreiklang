@@ -12,7 +12,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <SearchBox placeholder="lolol"></SearchBox>
+  <SearchBox @submit="console.log" placeholder="Search composers, pieces, etc."></SearchBox>
   <br />
   <!-- <div :class="$style.about"></div> -->
   <WorkPanel heading="Recommendations" url-to-show-more="/" :works="works" />

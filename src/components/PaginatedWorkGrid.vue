@@ -57,32 +57,34 @@ const goToPrevPage = () => {
   </div>
 
   <div :class="$style.controlsWrapper">
-    <span
-      :class="[$style.control, currentPage === 0 ? $style.disabled : $style.enabled]"
+    <button
+      :class="['free-floating-button', currentPage === 0 ? $style.disabled : $style.enabled]"
       @click="goToPrevPage"
-      >{{ "<" }}</span
     >
+      {{ "<" }}
+    </button>
 
     <!-- we add this because of a bug in vue -->
-    <span v-if="!Number.isFinite(numOfPagesMinusOne)">none</span>
-    <span
+    <button v-if="!Number.isFinite(numOfPagesMinusOne)">none</button>
+    <button
       v-else
-      :class="[$style.control, index - 1 === currentPage && $style.active]"
+      :class="['free-floating-button', index - 1 === currentPage && $style.active]"
       v-for="index in numOfPagesMinusOne + 1"
       @click="currentPage = index - 1"
       :key="index"
     >
       {{ index }}
-    </span>
+    </button>
 
-    <span
+    <button
       :class="[
-        $style.control,
+        'free-floating-button',
         currentPage === numOfPagesMinusOne ? $style.disabled : $style.enabled,
       ]"
       @click="goToNextPage"
-      >{{ ">" }}</span
     >
+      {{ ">" }}
+    </button>
   </div>
 </template>
 
@@ -104,12 +106,6 @@ const goToPrevPage = () => {
   align-items: center;
   justify-content: center;
   column-gap: 25px;
-}
-
-.control {
-  /* padding: 10px; */
-  transition: all 0.4s;
-  cursor: pointer;
 }
 
 .enabled {

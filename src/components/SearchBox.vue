@@ -1,49 +1,76 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const value = ref<string | null>(null);
+const value = ref<string>();
 
 const props = defineProps<{
   placeholder?: string;
 }>();
 
-const onInput = (e: InputEvent) => {
-  value.value = (e.target as any).value;
+const emit = defineEmits<{
+  // <eventName>: <expected arguments>
+  submit: [value: string]; // named tuple syntax
+}>();
+
+const onSubmit = (e: Event) => {
+  e.preventDefault();
+  if (!value.value) return;
+
+  emit("submit", value.value);
 };
 </script>
 
 <template>
-  <input
-    :class="$style.input"
-    type="text"
-    :placeholder="props.placeholder"
-    :value="value"
-    :oninput="onInput"
-  />
+  <form :class="$style.form">
+    <input :class="$style.input" type="text" :placeholder="props.placeholder" v-model="value" />
+    <button
+      v-on:keyup.enter="onSubmit"
+      @click="onSubmit"
+      :class="[$style.button, 'free-floating-button']"
+    >
+      Go
+    </button>
+  </form>
 </template>
 
 <style module>
-.input {
+.form {
   height: 2.25rem;
   background-color: var(--background-color-mute);
   border: var(--border-size) solid var(--border-color);
   transition: all 0.4s;
   padding: 0.5rem 1rem;
-  color: var(--text-color);
+
   border-radius: 100px;
   outline-style: solid;
 
   outline-offset: 2px;
   outline-color: rgba(0, 0, 0);
   outline-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
 }
 
-.input:focus {
+.input {
+  outline: none;
+  background-color: transparent;
+  border: none;
+  flex-grow: 2;
+  font-family: var(--font-family);
+  color: var(--text-color);
+}
+
+.button {
+  opacity: 0.7;
+}
+
+.button:hover {
+  opacity: 1;
+}
+
+.form:focus-within {
   outline-width: 1px;
   outline-color: var(--primary-color);
-  /* outline-offset: 2px;
-  outline-width: 2px; */
-  /* outline-color: var(--outline-color); */
-  /* border-color: transparent; */
 }
 </style>
