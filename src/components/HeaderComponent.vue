@@ -22,11 +22,13 @@ import LogoDreiKlang from "@/components/LogoDreiKlang.vue";
 <style module>
 /* @media (min-width: 1024px) { */
 header {
-  /* position: fixed;
+  position: fixed;
   top: 0;
-  left: 0; */
+  left: 0;
+  width: 200px;
+  height: 100%;
 
-  min-width: 20vw;
+  /* min-width: 20vw; */
   display: flex;
   flex-direction: column;
   place-items: center;

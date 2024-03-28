@@ -63,7 +63,7 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
 <template>
   <h2>{{ props.heading }}</h2>
 
-  <div ref="wrapper" :class="$style.contentWrapper">
+  <div ref="wrapper" :class="$style.contentWrapper" v-if="props.works.length">
     <WorkCard
       v-for="work in filteredWorks"
       :work-with-composer-info="work"
@@ -75,6 +75,9 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
         More
       </h2>
     </div>
+  </div>
+  <div :class="$style.contentWrapper" v-else>
+    <span class="center">Empty</span>
   </div>
 </template>
 

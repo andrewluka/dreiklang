@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { sanitize } from "@/services/utils";
 import { ref } from "vue";
-
-const value = ref<string>();
 
 const props = defineProps<{
   placeholder?: string;
+  startValue?: string;
 }>();
+
+const value = ref<string>(props.startValue || "");
 
 const emit = defineEmits<{
   // <eventName>: <expected arguments>
@@ -16,7 +18,7 @@ const onSubmit = (e: Event) => {
   e.preventDefault();
   if (!value.value) return;
 
-  emit("submit", value.value);
+  emit("submit", sanitize(value.value));
 };
 </script>
 

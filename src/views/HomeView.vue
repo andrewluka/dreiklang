@@ -4,7 +4,7 @@ import { fetchWorkWithComposerInfo, type WorkWithComposerInfo } from "@/services
 import { getViewedWorkIds } from "@/services/ViewingHistory";
 import { onBeforeMount, ref } from "vue";
 
-const works = ref<WorkWithComposerInfo[]>([]);
+const works = ref<WorkWithComposerInfo[]>();
 
 onBeforeMount(async () => {
   // first n works
@@ -18,7 +18,13 @@ onBeforeMount(async () => {
 <template>
   <div :class="$style.wrapper">
     <!-- <h1 :class="$style.title">Recently Viewed Works</h1> -->
-    <WorksPanel heading="Recently Viewed Works" url-to-show-more="/history" :works="works" />
+    <WorksPanel
+      v-if="works"
+      heading="Recently Viewed Works"
+      url-to-show-more="/history"
+      :works="works"
+    />
+    <span v-else class="center">Loading...</span>
   </div>
 </template>
 

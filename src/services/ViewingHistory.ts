@@ -15,7 +15,7 @@ const VIEWING_HISTORY_DELIMITER = ",";
 const getViewedWorkIds = () =>
   localStorage.getItem(VIEWING_HISTORY_KEY)?.split(VIEWING_HISTORY_DELIMITER) || [];
 
-const MAX_VIEWING_HISTORY = 10;
+const MAX_VIEWING_HISTORY = 100;
 
 const addWorkToViewingHistory = (id: string, work?: WorkInfo, composerInfo?: ComposerInfo) => {
   const idStr = String(id);
@@ -42,4 +42,6 @@ const addWorkToViewingHistory = (id: string, work?: WorkInfo, composerInfo?: Com
   composerInfo && addComposerToCache(composerInfo);
 };
 
-export { getViewedWorkIds, MAX_VIEWING_HISTORY, addWorkToViewingHistory };
+const clearHistory = () => localStorage.clear();
+
+export { getViewedWorkIds, MAX_VIEWING_HISTORY, addWorkToViewingHistory, clearHistory };

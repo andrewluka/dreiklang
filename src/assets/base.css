@@ -81,6 +81,12 @@
   font-weight: normal;
 }
 
+/* *:focus-visible {
+  outline-width: 2px;
+  outline-color: var(--primary-color);
+  outline-style: solid;
+} */
+
 body {
   min-height: 100vh;
   color: var(--text-color);
@@ -115,4 +121,15 @@ body {
   background: none;
   transition: all 0.4s;
   cursor: pointer;
+  font-family: var(--font-family);
+  opacity: 0.7;
+}
+
+.free-floating-button:hover {
+  opacity: 1;
+}
+
+.center {
+  max-width: fit-content;
+  margin: auto;
 }

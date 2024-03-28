@@ -41,12 +41,6 @@ a {
   padding: 7px 30px;
 }
 
-a:focus-visible {
-  outline-width: 2px;
-  outline-color: var(--primary-color);
-  outline-style: solid;
-}
-
 a {
   text-decoration: none;
   transition: 0.4s;

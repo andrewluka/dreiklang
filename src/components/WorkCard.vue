@@ -13,8 +13,13 @@ export interface WorkCardProps {
 
 const props = defineProps<WorkCardProps>();
 
+const emit = defineEmits<{
+  beforeRedirect: [w: WorkWithComposerInfo];
+}>();
+
 const router = useRouter();
 const goToWork = () => {
+  emit("beforeRedirect", props.workWithComposerInfo);
   router.push(`/work/${props.workWithComposerInfo.workInfo.work.id}`);
 };
 </script>

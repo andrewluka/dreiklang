@@ -1,30 +1,44 @@
 <script setup lang="ts">
-import WorkPanel from "@/components/WorksPanel.vue";
+import PaginatedWorkScroller from "@/components/PaginatedWorkScroller.vue";
+import TitleWithButton from "@/components/TitleWithButton.vue";
 import SearchBox from "@/components/SearchBox.vue";
 import { fetchRandomWorks, type WorkWithComposerInfo } from "@/services/FetchDetails";
 import { onBeforeMount, ref } from "vue";
+import { useRouter } from "vue-router";
 
 const works = ref<WorkWithComposerInfo[]>([]);
+const EXPLORE_CACHE_KEY = "explore_cache";
 
 onBeforeMount(async () => {
-  works.value = await fetchRandomWorks();
+  const cache = sessionStorage.getItem(EXPLORE_CACHE_KEY);
+
+  if (cache) works.value = JSON.parse(cache);
+  else {
+    works.value = await fetchRandomWorks();
+    sessionStorage.setItem(EXPLORE_CACHE_KEY, JSON.stringify(works.value));
+  }
 });
+
+const renew = async () => {
+  works.value = [];
+  works.value = await fetchRandomWorks();
+  sessionStorage.setItem(EXPLORE_CACHE_KEY, JSON.stringify(works.value));
+};
+
+const router = useRouter();
+
+const onSubmit = (query: string) => {
+  router.push(`/search?q=${query}`);
+};
 </script>
 
 <template>
-  <SearchBox @submit="console.log" placeholder="Search composers, pieces, etc."></SearchBox>
+  <SearchBox @submit="onSubmit" placeholder="Search composers, pieces etc."></SearchBox>
   <br />
   <!-- <div :class="$style.about"></div> -->
-  <WorkPanel heading="Recommendations" url-to-show-more="/" :works="works" />
-</template>
 
-<style module>
-/* @media (min-width: 1024px) { */
-.about {
-  flex-grow: 2;
-  height: inherit;
-  display: flex;
-  /* align-items: center; */
-}
-/* } */
-</style>
+  <TitleWithButton @button-click="renew" title="Recommendations" button-text="renew" />
+
+  <PaginatedWorkScroller v-if="works.length" :works="works" />
+  <span class="center" v-else>loading...</span>
+</template>

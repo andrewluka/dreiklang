@@ -17,8 +17,8 @@ nav {
   text-align: left;
   font-size: 1rem;
 
-  min-width: 20vw;
-  max-width: 200px;
+  /* min-width: 20vw;
+  max-width: 200px; */
 
   padding: 1rem 0;
   margin-top: 1rem;

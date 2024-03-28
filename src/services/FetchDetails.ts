@@ -1,4 +1,5 @@
 import { getComposerFromCache, getWorkFromCache } from "./Cache";
+import { sanitize } from "./utils";
 
 const BASE_URL = "https://api.openopus.org";
 
@@ -166,14 +167,8 @@ export const fetchRandomWorks = async (
 
     xhr.onerror = reject;
 
-    xhr.open("POST", `${BASE_URL}/dyn/work/random`, true);
-
-    for (const option of Object.keys(options.requestOptions || {})) {
-      const rawValue: string | string[] = (options.requestOptions as any)[option];
-      const value = typeof rawValue === "string" ? rawValue : rawValue.join(",");
-
-      xhr.setRequestHeader(option, value);
-    }
+    // to avoid redirect
+    xhr.open("POST", "https://dynapi.openopus.org/dyn/work/random/", true);
 
     xhr.send();
   });
@@ -197,4 +192,20 @@ export const fetchWorkWithComposerInfo = async (workId: string): Promise<WorkWit
   const composerInfo = await fetchComposerInfo(workInfo.composer.id);
 
   return { workInfo, composerInfo };
+};
+
+export const searchWorks = async (query: string, page: number) => {
+  type Res = WorkInfo & { composer: ComposerInfo };
+
+  try {
+    const res: Res[] = ((await get(`/omnisearch/${sanitize(query)}/${page || 0}.json`)) as any)
+      .results;
+
+    while (!res[0].work) res.shift();
+
+    return res;
+  } catch (e: any) {
+    if (e?.status?.error === "Nothing found") return [];
+    else throw e;
+  }
 };

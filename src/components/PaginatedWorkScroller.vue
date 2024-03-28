@@ -8,11 +8,15 @@ const props = defineProps<{
   works: WorkWithComposerInfo[];
 }>();
 
+const emit = defineEmits<{
+  workCardClicked: [w: WorkWithComposerInfo];
+}>();
+
 const wrapper = ref<HTMLDivElement>();
 const wrapperDimensions = useChildDimensions(wrapper);
 
 const maxWorksPerPage = ref(0);
-const currentPage = ref(0);
+const currentPageMinusOne = ref(0);
 
 onMounted(() => {
   const wrapperWidth = wrapperDimensions.value.clientWidth || 0;
@@ -31,42 +35,80 @@ const numOfPagesMinusOne = computed(() => {
 
 const worksToDisplay = computed(() =>
   props.works.slice(
-    maxWorksPerPage.value * currentPage.value,
-    maxWorksPerPage.value * currentPage.value + maxWorksPerPage.value
+    maxWorksPerPage.value * currentPageMinusOne.value,
+    maxWorksPerPage.value * currentPageMinusOne.value + maxWorksPerPage.value
   )
 );
 
 const goToNextPage = () => {
-  const nextPage = Math.min(numOfPagesMinusOne.value, currentPage.value + 1);
-  currentPage.value = nextPage;
+  const nextPage = Math.min(numOfPagesMinusOne.value, currentPageMinusOne.value + 1);
+  currentPageMinusOne.value = nextPage;
 };
 
 const goToPrevPage = () => {
-  const prevPage = Math.max(0, currentPage.value - 1);
-  currentPage.value = prevPage;
+  const prevPage = Math.max(0, currentPageMinusOne.value - 1);
+  currentPageMinusOne.value = prevPage;
 };
 </script>
 
 <template>
-  <div ref="wrapper" :class="$style.contentWrapper">
+  <div v-if="props.works.length" ref="wrapper" :class="$style.contentWrapper">
     <WorkCard
       v-for="work in worksToDisplay"
       :work-with-composer-info="work"
       :key="work.workInfo.work.id"
+      @before-redirect="(w) => emit('workCardClicked', w)"
     />
   </div>
+  <span class="center" v-else>empty</span>
 
   <div :class="$style.controlsWrapper">
     <button
-      :class="['free-floating-button', currentPage === 0 ? $style.disabled : $style.enabled]"
+      :class="[
+        'free-floating-button',
+        currentPageMinusOne === 0 ? $style.disabled : $style.enabled,
+      ]"
       @click="goToPrevPage"
     >
       {{ "<" }}
     </button>
 
-    <!-- we add this because of a bug in vue -->
-    <button v-if="!Number.isFinite(numOfPagesMinusOne)">none</button>
     <button
+      @click="currentPageMinusOne = 0"
+      :class="['free-floating-button']"
+      v-show="currentPageMinusOne > 1"
+    >
+      1
+    </button>
+    <span v-show="currentPageMinusOne > 2">..</span>
+
+    <button
+      @click="goToPrevPage"
+      :class="['free-floating-button']"
+      v-show="currentPageMinusOne >= 1"
+    >
+      {{ currentPageMinusOne }}
+    </button>
+    <button :class="['free-floating-button', $style.active]">{{ currentPageMinusOne + 1 }}</button>
+    <button
+      @click="goToNextPage"
+      :class="['free-floating-button']"
+      v-show="currentPageMinusOne < numOfPagesMinusOne - 1"
+    >
+      {{ currentPageMinusOne + 2 }}
+    </button>
+
+    <span v-show="currentPageMinusOne < numOfPagesMinusOne - 2">..</span>
+
+    <button
+      @click="currentPageMinusOne = numOfPagesMinusOne"
+      :class="['free-floating-button']"
+      v-show="currentPageMinusOne < numOfPagesMinusOne"
+    >
+      {{ numOfPagesMinusOne + 1 }}
+    </button>
+
+    <!-- <button
       v-else
       :class="['free-floating-button', index - 1 === currentPage && $style.active]"
       v-for="index in numOfPagesMinusOne + 1"
@@ -74,12 +116,12 @@ const goToPrevPage = () => {
       :key="index"
     >
       {{ index }}
-    </button>
+    </button> -->
 
     <button
       :class="[
         'free-floating-button',
-        currentPage === numOfPagesMinusOne ? $style.disabled : $style.enabled,
+        currentPageMinusOne === numOfPagesMinusOne ? $style.disabled : $style.enabled,
       ]"
       @click="goToNextPage"
     >

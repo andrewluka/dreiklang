@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import HeaderComponent from "@/components/HeaderComponent.vue";
+import { onBeforeMount } from "vue";
+
+onBeforeMount(() => {
+  document.onvisibilitychange = () => {
+    if (document.visibilityState === "hidden") {
+      sessionStorage.clear();
+    }
+  };
+});
 </script>
 
 <template>
@@ -15,14 +24,19 @@ import HeaderComponent from "@/components/HeaderComponent.vue";
 
 <style module>
 main {
-  --margin: 40px;
+  position: fixed;
+  left: 200px;
+  width: calc(100% - 200px);
+  height: 100%;
+
+  overflow: auto;
+
   flex-grow: 2;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: stretch;
-  margin: var(--margin);
-  max-width: calc(80vw - 2.25 * var(--margin));
+  padding: 40px;
 }
 
 /* @media (min-width: 1024px) { */

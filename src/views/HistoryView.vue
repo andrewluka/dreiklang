@@ -1,24 +1,31 @@
 <script setup lang="ts">
 import { fetchWorkWithComposerInfo, type WorkWithComposerInfo } from "@/services/FetchDetails";
-import { getViewedWorkIds } from "@/services/ViewingHistory";
-import PaginatedWorkGrid from "@/components/PaginatedWorkGrid.vue";
-import { ref, onBeforeMount } from "vue";
+import { getViewedWorkIds, clearHistory } from "@/services/ViewingHistory";
+import PaginatedWorkScroller from "@/components/PaginatedWorkScroller.vue";
+import { ref, onBeforeMount, computed } from "vue";
+import TitleWithButton from "@/components/TitleWithButton.vue";
 
-const viewedWorks = ref<WorkWithComposerInfo[]>([]);
+const viewedWorks = ref<WorkWithComposerInfo[]>();
 
 onBeforeMount(async () => {
   const ids = getViewedWorkIds();
 
   viewedWorks.value = await Promise.all(ids.map((id) => fetchWorkWithComposerInfo(id)));
 });
+
+const isLoading = computed(() => !Array.isArray(viewedWorks.value));
+
+const emptyHistory = () => {
+  clearHistory();
+  viewedWorks.value = [];
+};
 </script>
 
 <template>
-  <PaginatedWorkGrid v-if="viewedWorks.length" :works="viewedWorks"></PaginatedWorkGrid>
-  <span v-else>History empty</span>
-  <!-- <WorkCard
-    v-for="work in viewedWorks"
-    :work-with-composer-info="work"
-    :key="work.workInfo.work.id"
-  /> -->
+  <TitleWithButton title="History" button-text="Emtpy History" @button-click="emptyHistory" />
+  <PaginatedWorkScroller v-if="!isLoading && viewedWorks?.length" :works="viewedWorks" />
+  <span v-else-if="isLoading" class="center">Loading...</span>
+  <span v-else class="center">History empty</span>
 </template>
+
+<style></style>
