@@ -133,3 +133,16 @@ body {
   max-width: fit-content;
   margin: auto;
 }
+
+.enabled {
+  opacity: 1;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.disabled:hover {
+  opacity: 0.5;
+}

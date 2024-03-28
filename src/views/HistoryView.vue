@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { fetchWorkWithComposerInfo, type WorkWithComposerInfo } from "@/services/FetchDetails";
 import { getViewedWorkIds, clearHistory } from "@/services/ViewingHistory";
-import PaginatedWorkScroller from "@/components/PaginatedWorkScroller.vue";
+import PaginatedWorkGrid from "@/components/PaginatedWorkGrid.vue";
 import { ref, onBeforeMount, computed } from "vue";
 import TitleWithButton from "@/components/TitleWithButton.vue";
 
@@ -23,7 +23,7 @@ const emptyHistory = () => {
 
 <template>
   <TitleWithButton title="History" button-text="Emtpy History" @button-click="emptyHistory" />
-  <PaginatedWorkScroller v-if="!isLoading && viewedWorks?.length" :works="viewedWorks" />
+  <PaginatedWorkGrid v-if="!isLoading && viewedWorks?.length" :works="viewedWorks" />
   <span v-else-if="isLoading" class="center">Loading...</span>
   <span v-else class="center">History empty</span>
 </template>

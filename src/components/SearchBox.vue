@@ -38,6 +38,7 @@ const onSubmit = (e: Event) => {
 <style module>
 .form {
   height: 2.25rem;
+  /* margin-bottom: 20px; */
   background-color: var(--background-color-mute);
   border: var(--border-size) solid var(--border-color);
   transition: all 0.4s;

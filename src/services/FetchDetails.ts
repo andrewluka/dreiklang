@@ -17,12 +17,16 @@ export type Epoch =
 
 export type Genre = "Chamber" | "Keyboard" | "Orchestral" | "Stage" | "Vocal";
 
-interface ResponseStatus {
+interface SingleWorkResponseStatus {
   api: string;
   processingtime: number;
-  // source: string;
+  source?: string;
   success: "true" | "false";
   version: string;
+}
+
+interface MultipleWorksResponseStatus extends SingleWorkResponseStatus {
+  rows: number;
 }
 
 export type WorkInfo = Omit<WorkInfoResponse, "status">;
@@ -34,7 +38,7 @@ export interface WorkInfoResponse {
     complete_name: string;
     epoch: Epoch;
   };
-  status: ResponseStatus;
+  status: SingleWorkResponseStatus;
   work: {
     genre: Genre;
     title: string;
@@ -66,7 +70,7 @@ export interface ComposerInfo {
 }
 
 export interface ComposersInfoResponse {
-  status: ResponseStatus & { rows: number };
+  status: MultipleWorksResponseStatus;
   request: { type: "ids"; item: string };
   composers: ComposerInfo[];
 }
@@ -76,49 +80,7 @@ export interface WorkWithComposerInfo {
   composerInfo: ComposerInfo;
 }
 
-type Impossible<K extends keyof any> = {
-  [P in K]: never;
-};
-
-// The secret sauce! Provide it the type that contains only the properties you want,
-// and then a type that extends that type, based on what the caller provided
-// using generics.
-type NoExtraProperties<T, U extends T = T> = U & Impossible<Exclude<keyof U, keyof T>>;
-
-interface _RandomWorksFetchOptions {
-  requestOptions?: {
-    popularwork?: "1" | "0";
-    recommendedwork?: "1" | "0";
-    popularcomposer?: "1" | "0";
-    recommendedcomposer?: "1" | "0";
-    genre?: "All" | Genre;
-    epoch?: "All" | Epoch;
-    /**
-     * List of IDs of composers. Return only works by specified composers
-     *
-     */
-    composer?: string[];
-    /**
-     * List of IDs of composers, whose works not to return
-     *
-     */
-    composer_not?: string[];
-    /**
-     * List of IDs of composers, whose works not to return
-     *
-     */
-    work?: string[];
-  };
-
-  /**
-   * Limits number of works returned
-   */
-  limit?: number;
-}
-
-type RandomWorksFetchOptions = NoExtraProperties<_RandomWorksFetchOptions>;
-
-const get = <T extends { status: ResponseStatus }>(endpoint: string): Promise<T> => {
+const get = <T extends { status: SingleWorkResponseStatus }>(endpoint: string): Promise<T> => {
   return new Promise((resolve, reject) => {
     try {
       const xmlHttp = new XMLHttpRequest();
@@ -138,17 +100,7 @@ const get = <T extends { status: ResponseStatus }>(endpoint: string): Promise<T>
   });
 };
 
-export const fetchRandomWorks = async (
-  options: RandomWorksFetchOptions = {
-    requestOptions: {
-      popularcomposer: "1",
-      popularwork: "1",
-      recommendedcomposer: "1",
-      recommendedwork: "1",
-    },
-    limit: 7,
-  }
-): Promise<WorkWithComposerInfo[]> => {
+export const fetchRandomWorks = async (): Promise<WorkWithComposerInfo[]> => {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
 
@@ -194,18 +146,31 @@ export const fetchWorkWithComposerInfo = async (workId: string): Promise<WorkWit
   return { workInfo, composerInfo };
 };
 
-export const searchWorks = async (query: string, page: number) => {
-  type Res = WorkInfo & { composer: ComposerInfo };
+export type SearchResultWork = WorkInfo & { composer: ComposerInfo };
 
+export interface SearchResult {
+  request: {
+    type: "omnisearch";
+    search: string;
+    /**
+     * can be parsed as an integer
+     */
+    offset: string;
+  };
+  next: number;
+  results: SearchResultWork[];
+  status: MultipleWorksResponseStatus;
+}
+
+export const searchWorks = async (query: string, page: number): Promise<SearchResult | "none"> => {
   try {
-    const res: Res[] = ((await get(`/omnisearch/${sanitize(query)}/${page || 0}.json`)) as any)
-      .results;
+    const res: SearchResult = await get(`/omnisearch/${sanitize(query)}/${page || 0}.json`);
 
-    while (!res[0].work) res.shift();
+    while (!res.results[0].work) res.results.shift();
 
     return res;
   } catch (e: any) {
-    if (e?.status?.error === "Nothing found") return [];
+    if (e?.status?.error === "Nothing found") return "none";
     else throw e;
   }
 };

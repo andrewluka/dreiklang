@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PaginatedWorkScroller from "@/components/PaginatedWorkScroller.vue";
+import PaginatedWorkGrid from "@/components/PaginatedWorkGrid.vue";
 import TitleWithButton from "@/components/TitleWithButton.vue";
 import SearchBox from "@/components/SearchBox.vue";
 import { fetchRandomWorks, type WorkWithComposerInfo } from "@/services/FetchDetails";
@@ -39,6 +39,6 @@ const onSubmit = (query: string) => {
 
   <TitleWithButton @button-click="renew" title="Recommendations" button-text="renew" />
 
-  <PaginatedWorkScroller v-if="works.length" :works="works" />
+  <PaginatedWorkGrid v-if="works.length" :works="works" />
   <span class="center" v-else>loading...</span>
 </template>
