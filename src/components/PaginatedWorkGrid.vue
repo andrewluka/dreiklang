@@ -42,7 +42,6 @@ const worksToDisplay = computed(() =>
 );
 
 const goToPage = (page: number) => {
-  console.log(page);
   currentPageMinusOne.value = page;
 };
 </script>

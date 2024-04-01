@@ -15,7 +15,7 @@
 .logo {
   color: var(--primary-color);
   /* margin: 20px 10px 0 10px; */
-  margin: 20px 10px;
+  /* margin: 20px 10px; */
 }
 /* } */
 </style>

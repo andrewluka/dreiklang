@@ -76,7 +76,8 @@ export { WORK_CARD_WIDTH, WORK_CARD_HEIGHT };
 .wrapper {
   min-width: var(--width);
   max-width: var(--width);
-  height: calc(var(--width) * var(--height-to-width-ratio));
+  min-height: calc(var(--width) * var(--height-to-width-ratio));
+  max-height: calc(var(--width) * var(--height-to-width-ratio));
 
   border: var(--border-size) solid var(--border-color);
   /* box-shadow: 0px 0px 15px var(--border-color); */

@@ -18,7 +18,6 @@ watch(
   () => route.query,
   async ({ q: query, p: page }) => {
     searchResult.value = await searchWorks(String(query), Number(page) || 0);
-    console.log(searchResult);
   }
 );
 
@@ -87,7 +86,9 @@ const goToPrevPage = () =>
 }
 
 .button:hover {
-  color: var(--primary-color);
-  text-shadow: 0 0 20px var(--primary-color);
+  .enabled {
+    color: var(--primary-color);
+    text-shadow: 0 0 20px var(--primary-color);
+  }
 }
 </style>

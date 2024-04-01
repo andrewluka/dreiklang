@@ -49,8 +49,15 @@ onBeforeMount(async () => {
 <style module>
 .wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   column-gap: 15px;
+  row-gap: 15px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 15px;
+
+  width: 100%;
+  height: 100%;
 }
 
 .transition {
@@ -63,5 +70,12 @@ onBeforeMount(async () => {
 
 .hidden {
   opacity: 0;
+}
+
+@media (min-width: 1024px) {
+  .wrapper {
+    flex-direction: row;
+    align-items: flex-start;
+  }
 }
 </style>

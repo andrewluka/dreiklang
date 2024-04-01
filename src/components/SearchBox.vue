@@ -76,4 +76,17 @@ const onSubmit = (e: Event) => {
   outline-width: 1px;
   outline-color: var(--primary-color);
 }
+
+@media (max-width: 1023px) {
+  .form {
+    z-index: -1;
+
+    position: fixed;
+    top: 15px;
+    left: 65px;
+    width: calc(100% - 100px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
 </style>

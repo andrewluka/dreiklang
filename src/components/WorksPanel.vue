@@ -11,27 +11,6 @@ const wrapper = ref<HTMLDivElement>();
 
 const wrapperDimensions = useChildDimensions(wrapper);
 
-/*
-
-THIS DONT WORK. FIX IT.
-
-
-*/
-
-// const wrapper: Ref<HTMLDivElement | null> = ref(null);
-// const wrapperWidthMinusShowMoreLink = ref(0);
-
-// function callback() {
-//   wrapperWidthMinusShowMoreLink.value =
-//     (wrapper.value?.clientWidth || 0) - showMoreLinkWidth || wrapperWidthMinusShowMoreLink.value;
-
-//   if (wrapperWidthMinusShowMoreLink.value < 0) wrapperWidthMinusShowMoreLink.value = 0;
-// }
-
-// onBeforeMount(() => window.addEventListener("resize", callback));
-// onMounted(() => callback());
-// onBeforeUnmount(() => window.removeEventListener("resize", callback));
-
 const props = defineProps<{
   works: WorkWithComposerInfo[];
   heading: string;
@@ -39,7 +18,11 @@ const props = defineProps<{
 }>();
 
 const numberOfDisplayableElements = computed(() => {
-  const wrapperWidthMinusShowMoreLink = (wrapperDimensions.value.clientWidth || 30) - 30 || 0;
+  const value =
+    (wrapperDimensions.value.clientWidth || 0) < 500
+      ? (wrapperDimensions.value.clientHeight && wrapperDimensions.value.clientHeight - 200) || 0
+      : wrapperDimensions.value.clientWidth || 0;
+  const wrapperWidthMinusShowMoreLink = (value || 30) - 30 || 0;
 
   return Math.floor(wrapperWidthMinusShowMoreLink / cardwidthwithcolumngap) || 1;
 });
@@ -69,7 +52,7 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
       :work-with-composer-info="work"
       :key="work.workInfo.work.id"
     />
-    <div v-if="shouldShowMore" @click="go" :class="[$style.showMore, $style.fadeHoverEffect]">
+    <div @click="go" :class="[$style.showMore, $style.fadeHoverEffect]">
       <h2>
         Show<br />
         More
@@ -83,7 +66,11 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
 
 <style module>
 .showMore {
-  min-width: 150px;
+  min-width: var(--width);
+  width: var(--width);
+  min-height: calc(var(--width) * var(--height-to-width-ratio));
+  height: calc(var(--width) * var(--height-to-width-ratio));
+
   color: white;
   background-color: black;
   border-radius: var(--border-radius);
@@ -106,15 +93,12 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
 }
 
 .contentWrapper {
-  position: relative;
-  z-index: 1;
   display: flex;
-  flex-direction: row;
-  /* justify-content: space-between; */
+  flex-direction: column;
 
   padding: 15px 0;
   column-gap: 20px;
-  /* border: var(--border-size) solid var(--border-color); */
+  row-gap: 20px;
   border-left-width: 0;
   border-right-width: 0;
 
@@ -123,12 +107,13 @@ const go = () => props.urlToShowMore && router.push(props.urlToShowMore);
 
   scrollbar-width: thin;
   scrollbar-width: none;
-  /* box-shadow: -10px 0px 0px 5px black; */
+  height: 1024px;
+}
 
-  /* scroll-padding: 50%; */
-  /* box-shadow:
-    inset 5px 0px 5px -5px rgba(0, 0, 0, 0.8),
-    inset -5px 0px 5px -5px rgba(0, 0, 0, 0.8); */
-  /* max-width: 70vw; */
+@media (min-width: 500px) {
+  .contentWrapper {
+    flex-direction: row;
+    height: auto;
+  }
 }
 </style>

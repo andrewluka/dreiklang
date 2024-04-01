@@ -36,9 +36,9 @@ const className: ComputedRef<"active" | "inactive"> = computed(() => {
 </template>
 
 <style scoped>
-/* TODO: an actually nice style */
 a {
   padding: 7px 30px;
+  font-weight: 900;
 }
 
 a {
@@ -64,5 +64,11 @@ a {
   color: var(--primary-color);
   opacity: 0.7;
   background-color: transparent;
+}
+
+@media (min-width: 1024px) {
+  a {
+    font-weight: normal;
+  }
 }
 </style>

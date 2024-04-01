@@ -25,9 +25,20 @@ const router = createRouter({
     },
     {
       path: "/search",
+      name: "search",
       component: () => import("@/views/SearchView.vue"),
     },
   ],
+  scrollBehavior(to, from) {
+    const bothSearch = to.name === "search" || from.name === "search";
+    const sameSearchTerm = !!to.query.q && to.query.q === from.query.q;
+    const goingToNextPage = Number(to.query.p || 0) - 1 === Number(from.query.p || 0);
+
+    if (bothSearch && sameSearchTerm && goingToNextPage) {
+      const main = document.querySelector("main");
+      if (main) main.scrollTop = 0;
+    }
+  },
 });
 
 export default router;
