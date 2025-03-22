@@ -41,7 +41,7 @@ onBeforeMount(async () => {
       <h4>{{ workInfo?.work.subtitle || "" }}</h4>
       <h6>{{ workInfo?.work.genre || "" }}</h6>
       <h6>{{ composerInfo?.epoch || "" }}</h6>
-      <h6>{{ workInfo?.work.subtitle || "" }}</h6>
+      <h6 style="padding-bottom: 15px">{{ workInfo?.work.subtitle || "" }}</h6>
     </div>
   </div>
 </template>
@@ -58,6 +58,8 @@ onBeforeMount(async () => {
 
   width: 100%;
   height: 100%;
+
+  padding-bottom: 15px;
 }
 
 .transition {
