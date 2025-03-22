@@ -29,10 +29,16 @@ const className: ComputedRef<"active" | "inactive"> = computed(() => {
 
   return propTo === routeName ? "active" : "inactive";
 });
+
+const loseFocus = () => {
+  if (document.activeElement) {
+    (document.activeElement as any).blur();
+  }
+}
 </script>
 
 <template>
-  <RouterLink v-bind:to="props.to" :class="className"><slot></slot></RouterLink>
+  <RouterLink v-bind:to="props.to" :class="className" @click="loseFocus"><slot></slot></RouterLink>
 </template>
 
 <style scoped>
